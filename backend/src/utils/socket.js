@@ -5,7 +5,7 @@ let io;
 function initializeSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: "http://localhost:5173", // Frontend URL
+      origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL
       methods: ["GET", "POST"],
       credentials: true
     },

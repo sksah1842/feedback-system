@@ -68,6 +68,7 @@ Create a `.env` file in the `backend` directory with the following variables:
 MONGO_URI=mongodb://localhost:27017/feedback-system
 PORT=5000
 JWT_SECRET=your_jwt_secret_key_here
+FRONTEND_URL=http://localhost:5173
 ```
 
 **Note**: Replace `your_jwt_secret_key_here` with a secure random string.
@@ -232,5 +233,40 @@ feedback-system/
 - Monitor server logs for backend issues
 - Use MongoDB Compass for database inspection
 
+## 🚀 Deployment
+
+### Frontend (Vercel)
+1. Go to [Vercel](https://vercel.com/) and import your repository.
+2. Set the following environment variables in Vercel project settings:
+   - `VITE_API_URL` = `https://<your-render-backend-url>`
+   - `VITE_SOCKET_URL` = `https://<your-render-backend-url>`
+3. Deploy. Vercel will auto-detect Vite/React and build your app.
+
+### Backend (Render)
+1. Go to [Render](https://render.com/) and create a new Web Service from your repo.
+2. Set the following environment variables in Render:
+   - `MONGO_URI` = your MongoDB connection string
+   - `JWT_SECRET` = your JWT secret
+   - `FRONTEND_URL` = `https://<your-vercel-frontend-url>`
+3. Render will auto-detect Node.js and start your server on the correct port.
+
+### CORS & Real-time
+- Make sure `FRONTEND_URL` in Render matches your deployed Vercel domain.
+- Make sure `VITE_API_URL` and `VITE_SOCKET_URL` in Vercel match your Render backend URL (including https).
+- For local development, these default to localhost.
+
+### Example .env files
+#### backend/.env.example
+```
+MONGO_URI=mongodb://localhost:27017/feedback-system
+PORT=5000
+JWT_SECRET=your_jwt_secret_key_here
+FRONTEND_URL=http://localhost:5173
+```
+#### frontend/.env.example
+```
+VITE_API_URL=http://localhost:5000
+VITE_SOCKET_URL=http://localhost:5000
+```
 
 **Happy Coding! 🎉** 

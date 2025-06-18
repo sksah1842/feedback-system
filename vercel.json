@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://feedback-system-bjpx.onrender.com/api/$1" }
+  ]
+} 

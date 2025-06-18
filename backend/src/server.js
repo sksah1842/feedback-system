@@ -12,7 +12,8 @@ const app = express();
 const server = http.createServer(app);
 const io = initializeSocket(server);
 
-app.use(cors());
+const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', fbRoutes);

@@ -1,8 +1,11 @@
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+
 // Create socket connection with proper configuration
-const socket = io('http://localhost:5000', {
+const socket = io(SOCKET_URL, {
   transports: ['websocket', 'polling'],
   autoConnect: true,
   reconnection: true,
@@ -51,14 +54,14 @@ export default {
     return socket;
   },
   async submit(data) { 
-    return axios.post('/api/feedback', data); 
+    return axios.post(`${API_URL}/api/feedback`, data); 
   },
   async getAll(options = {}) {
-    const resp = await axios.get('/api/feedback/list', { params: options, headers: authHeader() });
+    const resp = await axios.get(`${API_URL}/api/feedback/list`, { params: options, headers: authHeader() });
     return resp.data;
   },
   async getStats(options = {}) {
-    const resp = await axios.get('/api/feedback/stats', { params: options, headers: authHeader() });
+    const resp = await axios.get(`${API_URL}/api/feedback/stats`, { params: options, headers: authHeader() });
     return resp.data;
   }
 };
