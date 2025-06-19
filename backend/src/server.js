@@ -16,11 +16,14 @@ const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 // app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.use(cors({
   origin: [
-    "hhttps://feedback-system-hb6m-git-main-sumit-kumars-projects-b887fe80.vercel.app",
+    "https://feedback-system-hb6m-git-main-sumit-kumars-projects-b887fe80.vercel.app",
     "http://localhost:5173"
   ],
   credentials: true
 }));
+app.get('/', (req, res) => {
+  res.send('✅ Backend is working!');
+});
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/feedback', fbRoutes);
