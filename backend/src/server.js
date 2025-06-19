@@ -37,9 +37,3 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 mongoose.connection.on('error', err => {
   console.error('❌ MongoDB connection error:', err);
 });
-
-const socket = io(
-  process.env.NODE_ENV === 'production'
-    ? 'https://feedback-system-bjpx.onrender.com'
-    : 'http://localhost:5000'
-);
