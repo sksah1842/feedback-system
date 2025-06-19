@@ -16,7 +16,8 @@ const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 // app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.use(cors({
   origin: [
-    "https://feedback-system-hb6m-git-main-sumit-kumars-projects-b887fe80.vercel.app",
+    "https://feedback-system-hb6m.vercel.app",
+    "https://feedback-system-hb6m-5h2ha6s54-sumit-kumars-projects-b887fe80.vercel.app",
     "http://localhost:5173"
   ],
   credentials: true
@@ -36,3 +37,9 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 mongoose.connection.on('error', err => {
   console.error('❌ MongoDB connection error:', err);
 });
+
+const socket = io(
+  process.env.NODE_ENV === 'production'
+    ? 'https://feedback-system-bjpx.onrender.com'
+    : 'http://localhost:5000'
+);
