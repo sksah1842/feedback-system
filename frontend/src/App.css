@@ -851,3 +851,39 @@
     font-size: var(--font-size-2xl);
   }
 }
+
+/* Two-column admin dashboard layout */
+.admin-main-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-8);
+  margin-bottom: var(--spacing-8);
+}
+
+.admin-main-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.admin-main-col-left {
+  flex: 0 0 55%;
+  min-width: 0;
+}
+
+.admin-main-col-right {
+  flex: 0 0 45%;
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .admin-main-row {
+    flex-direction: column;
+    gap: var(--spacing-6);
+  }
+  .admin-main-col-left,
+  .admin-main-col-right {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+}

@@ -280,69 +280,71 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* Stats Cards */}
-          <div className="admin-stats">
-            <div className="stat-card">
-              <div className="stat-number">{fb.length}</div>
-              <div className="stat-label">Total Feedback</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">
-                {fb.length > 0 ? (fb.reduce((sum, item) => sum + item.rating, 0) / fb.length).toFixed(1) : '0'}
+          {/* Main Row: Two Columns */}
+          <div className="admin-main-row">
+            <div className="admin-main-col admin-main-col-left">
+              <div className="admin-stats">
+                <div className="stat-card">
+                  <div className="stat-number">{fb.length}</div>
+                  <div className="stat-label">Total Feedback</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-number">
+                    {fb.length > 0 ? (fb.reduce((sum, item) => sum + item.rating, 0) / fb.length).toFixed(1) : '0'}
+                  </div>
+                  <div className="stat-label">Average Rating</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-number">
+                    {fb.filter(item => item.rating >= 4).length}
+                  </div>
+                  <div className="stat-label">Positive Reviews (4+ stars)</div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-number">
+                    {new Set(fb.map(item => item.productId)).size}
+                  </div>
+                  <div className="stat-label">Products Reviewed</div>
+                </div>
               </div>
-              <div className="stat-label">Average Rating</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-number">
-                {fb.filter(item => item.rating >= 4).length}
+              <div className="admin-chart">
+                <Bar data={chartData} options={chartOptions} />
               </div>
-              <div className="stat-label">Positive Reviews (4+ stars)</div>
             </div>
-            <div className="stat-card">
-              <div className="stat-number">
-                {new Set(fb.map(item => item.productId)).size}
+            <div className="admin-main-col admin-main-col-right">
+              <div className="admin-table">
+                <h3>Recent Feedback</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Product</th>
+                      <th>Rating</th>
+                      <th>Name</th>
+                      <th>Feedback</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fb.map(f => (
+                      <tr key={f._id} className={f.isNew ? 'new-feedback-row' : ''}>
+                        <td>{new Date(f.createdAt).toLocaleDateString()}</td>
+                        <td>{f.productId}</td>
+                        <td>
+                          <span style={{ color: '#f59e0b' }}>
+                            {'★'.repeat(f.rating)}
+                            {'☆'.repeat(5 - f.rating)}
+                          </span>
+                        </td>
+                        <td>{f.name || 'Anonymous'}</td>
+                        <td style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {f.text}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              <div className="stat-label">Products Reviewed</div>
             </div>
-          </div>
-
-          {/* Chart */}
-          <div className="admin-chart">
-            <Bar data={chartData} options={chartOptions} />
-          </div>
-
-          {/* Feedback Table */}
-          <div className="admin-table">
-            <h3>Recent Feedback</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Product</th>
-                  <th>Rating</th>
-                  <th>Name</th>
-                  <th>Feedback</th>
-                </tr>
-              </thead>
-              <tbody>
-                {fb.map(f => (
-                  <tr key={f._id} className={f.isNew ? 'new-feedback-row' : ''}>
-                    <td>{new Date(f.createdAt).toLocaleDateString()}</td>
-                    <td>{f.productId}</td>
-                    <td>
-                      <span style={{ color: '#f59e0b' }}>
-                        {'★'.repeat(f.rating)}
-                        {'☆'.repeat(5 - f.rating)}
-                      </span>
-                    </td>
-                    <td>{f.name || 'Anonymous'}</td>
-                    <td style={{ maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {f.text}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
