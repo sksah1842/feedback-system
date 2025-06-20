@@ -27,9 +27,10 @@ const allowedOrigins = [
   'https://feedback-system-t5cs-oibhfdiet-sumit-kumars-projects-b887fe80.vercel.app',
   'http://localhost:5173'
 ];
-
+console.log('🔥 CORS Middleware Initialized');
 app.use(cors({
   origin: function (origin, callback) {
+    console.log('🌐 Incoming request from origin:', origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
