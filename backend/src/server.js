@@ -14,13 +14,34 @@ const io = initializeSocket(server);
 
 // const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 
+// app.use(cors({
+//   // origin: [
+//   //   'https://feedback-system-t5cs-oibhfdiet-sumit-kumars-projects-b887fe80.vercel.app',
+//   //   "http://localhost:5173"
+//   // ],
+//   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   credentials: true
+// }));
+const allowedOrigins = [
+  'https://feedback-system-t5cs-oibhfdiet-sumit-kumars-projects-b887fe80.vercel.app',
+  'http://localhost:5173'
+];
+
 app.use(cors({
-  origin: [
-    'https://feedback-system-t5cs-oibhfdiet-sumit-kumars-projects-b887fe80.vercel.app',
-    "http://localhost:5173"
-  ],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed for this origin: ' + origin));
+    }
+  },
   credentials: true
 }));
+
+
+
+
 app.get('/', (req, res) => {
   res.send('✅ Backend is working!');
 });
