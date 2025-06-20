@@ -1,8 +1,9 @@
 const { Server } = require('socket.io');
 
-let io;
+let io = null;
 
 function initializeSocket(server) {
+  if (io) return io; // Prevent re-initialization!
   io = new Server(server, {
     cors: {
       origin: process.env.FRONTEND_URL || "http://localhost:5173", // Frontend URL
@@ -11,7 +12,7 @@ function initializeSocket(server) {
     },
     transports: ['websocket', 'polling']
   });
-
+  
   io.on('connection', (socket) => {
     console.log('🔌 Client connected:', socket.id);
 
@@ -30,7 +31,7 @@ function initializeSocket(server) {
       console.error('❌ Socket error:', error);
     });
   });
-
+  console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
   console.log('🚀 Socket.io server initialized');
   return io;
 }

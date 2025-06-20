@@ -12,12 +12,11 @@ const app = express();
 const server = http.createServer(app);
 const io = initializeSocket(server);
 
-const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
-// app.use(cors({ origin: allowedOrigin, credentials: true }));
+// const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+
 app.use(cors({
   origin: [
-    "https://feedback-system-hb6m.vercel.app",
-    "https://feedback-system-hb6m-5h2ha6s54-sumit-kumars-projects-b887fe80.vercel.app",
+    'https://feedback-system-t5cs-oibhfdiet-sumit-kumars-projects-b887fe80.vercel.app',
     "http://localhost:5173"
   ],
   credentials: true

@@ -41,10 +41,18 @@ export default function AdminDashboard() {
       navigate('/login');
       return;
     }
-    
     loadAll();
     setupRealtimeUpdates();
-    
+    // Subscribe to real-time feedback using store.onNew
+    const unsubscribe = store.onNew((newFeedback) => {
+      const feedbackWithFlag = { ...newFeedback, isNew: true };
+      setFb(prev => [feedbackWithFlag, ...prev]);
+      updateStatsWithNewFeedback(newFeedback);
+      showNewFeedbackNotification(newFeedback);
+      setTimeout(() => {
+        setFb(prev => prev.map(f => f._id === newFeedback._id ? { ...f, isNew: false } : f));
+      }, 3000);
+    });
     // Cleanup function
     return () => {
       const socket = store.getSocket();
@@ -52,45 +60,32 @@ export default function AdminDashboard() {
         socket.off('new-feedback');
         socket.off('connect');
         socket.off('disconnect');
+        socket.off('admin-joined');
       }
+      // Remove store.onNew listener if possible
+      if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, [navigate]);
 
   const setupRealtimeUpdates = () => {
     const socket = store.getSocket();
-    
-    // Check initial connection status
     setIsConnected(socket.connected);
-    
-    // Listen for connection events
+    // Remove any previous listeners to avoid duplicates
+    socket.off('connect');
+    socket.off('disconnect');
+    socket.off('admin-joined');
+    // Always join admin room on connect
     socket.on('connect', () => {
-      console.log('Dashboard: Socket connected');
+      console.log('Dashboard: Socket connected', socket.id);
       setIsConnected(true);
+      socket.emit('join-admin');
     });
-    
     socket.on('disconnect', () => {
       console.log('Dashboard: Socket disconnected');
       setIsConnected(false);
     });
-    
-    // Listen for new feedback
-    socket.on('new-feedback', (newFeedback) => {
-      console.log('Dashboard: New feedback received:', newFeedback);
-      
-      // Add new feedback to the top of the list with a flag
-      const feedbackWithFlag = { ...newFeedback, isNew: true };
-      setFb(prev => [feedbackWithFlag, ...prev]);
-      
-      // Update stats in real-time
-      updateStatsWithNewFeedback(newFeedback);
-      
-      // Show a notification
-      showNewFeedbackNotification(newFeedback);
-      
-      // Remove the new flag after animation
-      setTimeout(() => {
-        setFb(prev => prev.map(f => f._id === newFeedback._id ? { ...f, isNew: false } : f));
-      }, 3000);
+    socket.on('admin-joined', (data) => {
+      console.log('Dashboard: Admin joined room', data);
     });
   };
 

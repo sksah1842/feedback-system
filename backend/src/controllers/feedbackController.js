@@ -5,17 +5,23 @@ exports.submit = async (req, res) => {
   try {
     const feedback = new Feedback(req.body);
     await feedback.save();
-    
-    // Emit to admin room for real-time updates
-    emitToAdmin('new-feedback', feedback);
-    
+
+    // Add logging
+    console.log('Feedback saved:', feedback);
+
+    // Emit to admin room for real-time updates (with all fields)
+    const savedFeedback = await Feedback.findById(feedback._id);
+    console.log('About to emit new-feedback:', savedFeedback);
+    const { emitToAdmin } = require('../utils/socket');
+    emitToAdmin('new-feedback', savedFeedback.toObject());
+    console.log('Emitted new-feedback for:', savedFeedback._id);
+
     res.status(201).json(feedback);
   } catch (error) {
     console.error('Feedback submission error:', error);
     res.status(400).json({ message: error.message });
   }
 };
-
 exports.list = async (req, res) => {
   try {
     const { page = 1, limit = 50, productId } = req.query;
