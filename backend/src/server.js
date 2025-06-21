@@ -15,7 +15,8 @@ const io = initializeSocket(server);
 // const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 const allowedOrigins = [
   // process.env.FRONTEND_URL || 'http://localhost:5173',
-  'https://feedback-system-t5cs-ejf5m4vai-sumit-kumars-projects-b887fe80.vercel.app',
+  'https://feedback-system-t5cs-ejf5m4vai-sumit-kumars-projects-b887fe80.vercel.app', 
+  'https://feedback-system-t5cs.vercel.app',
   'http://localhost:5173'
 ].filter(Boolean);
 
